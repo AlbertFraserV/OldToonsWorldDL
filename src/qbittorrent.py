@@ -20,10 +20,23 @@ class QBittorrentWrapper:
         if 'Ok.' not in response.text:
             raise Exception(f"Failed to log in to qBittorrent Web UI: {response.text}")
 
-    def add_torrent(self, torrent_url, category=None):
-        add_url = f"{self.base_url}/api/v2/torrents/add"
-        data = {'urls': torrent_url}
-        if category:  # Add the category if specified
-            data['category'] = category
-        response = self.session.post(add_url, data=data)
-        return response.status_code == 200
+    def add_torrent(self, torrent_url, info_hash, category=None):
+        if not self.is_torrent_present(info_hash):
+            add_url = f"{self.base_url}/api/v2/torrents/add"
+            data = {'urls': torrent_url}
+            if category:
+                data['category'] = category
+            response = self.session.post(add_url, data=data)
+            return response.ok
+        else:
+            print("Torrent is already present in the client.")
+            return False
+
+    def is_torrent_present(self, info_hash):
+        list_url = f"{self.base_url}/api/v2/torrents/info"
+        response = self.session.get(list_url)
+        torrents = response.json()
+        for torrent in torrents:
+            if info_hash.lower() == torrent.get('hash').lower():  # Compare hashes in a case-insensitive manner
+                return True
+        return False
