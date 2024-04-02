@@ -23,7 +23,7 @@ for torrent in torrents['data']:
     provided_timestamp = datetime.strptime(provided_timestamp_str, "%Y-%m-%dT%H:%M:%S.%fZ")
 
     current_timestamp = datetime.utcnow()
-    if (current_timestamp - provided_timestamp > timedelta(hours=1)) and torrent_fl == '100%':
+    if (current_timestamp - provided_timestamp > timedelta(hours=1)) and torrent_fl != '100%':
         # print(f"{torrent_name} - {torrent_fl}")
         continue
 
