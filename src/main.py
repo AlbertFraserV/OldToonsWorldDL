@@ -23,7 +23,7 @@ def download_new_freeleach(debug = True):
         provided_timestamp = datetime.strptime(provided_timestamp_str, "%Y-%m-%dT%H:%M:%S.%fZ")
 
         current_timestamp = datetime.utcnow()
-        if (current_timestamp - provided_timestamp > timedelta(hours=1)) or torrent_fl != '100%':
+        if (current_timestamp - provided_timestamp > timedelta(hours=2)) or torrent_fl != '100%':
             # print(f"{torrent_name} - {torrent_fl}")
             continue
 
